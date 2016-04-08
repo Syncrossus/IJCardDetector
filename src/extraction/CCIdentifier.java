@@ -60,6 +60,12 @@ public class CCIdentifier{
 		return false;
 	}
 
+	/**
+	 * 
+	 * @param pixelValue the value of the connected component
+	 * @param ip image in which the CC needs to be found
+	 * @return all connected components detected
+	 */
 	public static ArrayList<ConnectedComponent> getCC(int pixelValue, ImageProcessor ip){
 
 		boolean[][] visited = new boolean[ip.getWidth()][ip.getHeight()];
@@ -128,7 +134,7 @@ public class CCIdentifier{
 			}
 		}
 
-		return null;
+		return connectedComponent;
 	}
 
 }
