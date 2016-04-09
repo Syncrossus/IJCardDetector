@@ -1,13 +1,16 @@
 package extraction;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
 import ij.ImagePlus;
+import ij.gui.GenericDialog;
 import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
+import tools.Line;
 
 public class Hough_ implements PlugInFilter{
 
@@ -58,20 +61,41 @@ public class Hough_ implements PlugInFilter{
 	 */
 	public static void displayLine(ImageProcessor image, List<Line> lines) {
 		System.out.println("Droites");
+		image.setColor(Color.WHITE);
 		for(Line line:lines){
 			System.out.println(line);
+			int x1=0, x2=0, y1=0, y2=0;
 			
+			// Ligne verticale
 			if(line.isVertical()){
-				for(int y=0; y<image.getHeight(); y++){
-					image.putPixel(line.getVerticalStep(), y, 255);
-				}
+				x1 = line.getVerticalStep();
+				x2 = line.getVerticalStep();
+				y1 = 0;
+				y2 = image.getHeight()-1;
 			}
+			
+			// Ligne horizontale
 			else{
-				for(int x=0; x<image.getWidth(); x++){
-					image.putPixel(x, line.getY(x), 255);
+				boolean found = false;
+				for(x1=0; x1<image.getWidth() && !found; x1++){
+					y1 = line.getY(x1);
+					if(y1>=0 && y1<image.getHeight()){
+						found = true;
+					}
+				}
+				
+				found = false;
+				for(x2=image.getWidth()-1; x2>=0 && !found; x2--){
+					y2 = line.getY(x2);
+					if(y2>=0 && y2<image.getHeight()){
+						found = true;
+					}
 				}
 			}
+			
+			image.drawLine(x1, y1, x2, y2);
 		}
+		
 	}
 	
 
