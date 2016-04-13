@@ -1,5 +1,7 @@
 package tools;
 
+import ij.process.ImageProcessor;
+
 /**
  * Masque de convolution (carre).
  * Les coordonnees des elements du masque vont de -rayon a +rayon.
@@ -9,6 +11,16 @@ public class Masque {
     private double[] contenu;
     private int rayon;
     private int largeur;
+    
+    public Masque(ImageProcessor image){
+    	this(Math.max(image.getWidth(), image.getHeight()));
+		this.remplirAvec(0); // le masque devant etre carre, il y aura des vides dans le masque si le template est rectangulaire. on remplit donc es vides avec des 0.
+		for(int i=0; i<image.getWidth(); i++){
+			for(int j=0; j<image.getHeight(); j++){
+				this.put(i, j, image.getPixel(image.getWidth()-i, image.getHeight()-j));
+			}
+		}
+    }
 
     /**
     * Cree un nouveau masque de convolution.

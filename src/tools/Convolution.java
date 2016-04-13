@@ -79,13 +79,21 @@ public class Convolution {
 	public static double[][] correlationCroisee(ImageProcessor template, ImageProcessor image){
 		// La correlation croisee est une convolution sans symétrisation.
 		//Nous allons donc utiliser la convolution, et symétriser notre masque avant pour compenser la symétrisation de la convolution.
-		Masque m = new Masque(Math.max(template.getWidth(), template.getHeight()));
-		m.remplirAvec(0); // le masque devant etre carre, il y aura des vides dans le masque si le template est rectangulaire. on remplit donc es vides avec des 0.
-		for(int i=0; i<template.getWidth(); i++){
-			for(int j=0; j<template.getHeight(); j++){
-				m.put(i, j, template.getPixel(template.getWidth()-i, template.getHeight()-j));
-			}
-		}
+		Masque m = new Masque(template);
+		return Convolution.convoluer(image, m);
+	}
+	
+	/**
+	 * @param template : a template image to find in the target image
+	 * @param image : the image in which to search for the template
+	 * @return a matrix with a match percentage for each position the template can occupy on the image
+	 */
+	public static double[][] correlationCroiseeNormalisee(ImageProcessor template, ImageProcessor image){
+		// La correlation croisee est une convolution sans symétrisation.
+		//Nous allons donc utiliser la convolution, et symétriser notre masque avant pour compenser la symétrisation de la convolution.
+		double imageMean=ImageProcessorTools.mean(image);		
+		double templateMean=ImageProcessorTools.mean(template);
+		Masque m = new Masque(template);
 		return Convolution.convoluer(image, m);
 	}
 	
