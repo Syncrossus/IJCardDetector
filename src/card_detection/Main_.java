@@ -5,7 +5,6 @@ import java.util.List;
 import binarisation.Otsu_;
 import edges.Canny_;
 import extraction.CardFinder;
-import extraction.Line;
 import extraction.Hough_;
 import ij.ImagePlus;
 import ij.gui.ImageWindow;
@@ -13,6 +12,7 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import mean.FiltreGaussien_;
+import tools.Line;
 
 public class Main_ implements PlugInFilter{
 	@Override

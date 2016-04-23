@@ -1,6 +1,9 @@
 package extraction;
 
 import java.util.List;
+
+import tools.Line;
+
 import java.util.ArrayList;
 
 public class CardFinder {
