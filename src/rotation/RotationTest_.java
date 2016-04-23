@@ -15,37 +15,9 @@ public class RotationPetation_ implements PlugInFilter {
 	 */
 	public static ImageProcessor rotate(ImageProcessor ip, int angle){
 		
-		ImageProcessor ipRotate = new ByteProcessor(ip, false);
 		ImageProcessor dst = new ByteProcessor(ipRotate.getWidth(), ipRotate.getHeight());
 		
-		//calcul de l'angle en radian
-        double theta = angle/(180.0/Math.PI); 
-        
-		//tourne l'image par rapport au centre de l'image d'origine
-		int centerX = ip.getWidth()/2;
-        int centerY = ip.getHeight()/2;
-        
-		for(int i=0; i<ip.getWidth();i++){
-			for(int j=0;j<ip.getHeight();j++){
-				
-				//récupère la valeur du pixel concerné
-				int value = ip.getPixel(i, j);
-				
-				//récupère les nouvelles coordonnées du pixel concerné
-                int coordX = (int)((i-centerX)*Math.cos(theta) - (j-centerY)*Math.sin(theta)+centerX); 
-                int coordY = (int)((i-centerX)*Math.sin(theta) + (j-centerY)*Math.cos(theta)+centerY);
-                
-                //place le pixel dans la nouvelle image
-				try{
-					dst.putPixel(coordX, coordY, value);
-				}
-				catch(Exception e){
-					//ne fait rien dans le cas où ça sort de l'image
-					
-				}
-				
-			}
-		}
+		dst = Rotation.rotate(ip, 45);
 		return dst;
 	}
 	
