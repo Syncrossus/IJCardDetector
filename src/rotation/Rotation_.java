@@ -13,7 +13,7 @@ public class Rotation_ {
 	 */
 	public static ImageProcessor rotate(ImageProcessor ip, int angle){
 		
-		ImageProcessor ipRotate = new ByteProcessor(ipRotate.getWidth(), ipRotate.getHeight());
+		ImageProcessor ipRotate = new ByteProcessor(ip.getWidth(), ip.getHeight());
 		
 		//calcul de l'angle en radian
         double theta = angle/(180.0/Math.PI); 

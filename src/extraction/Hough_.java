@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ij.ImagePlus;
-import ij.gui.GenericDialog;
 import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
-import tools.Line;
 
 public class Hough_ implements PlugInFilter{
 

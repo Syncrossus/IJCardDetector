@@ -1,12 +1,12 @@
 package rotation;
-import ij.process.ByteProcessor;
-import ij.process.ImageProcessor;
 import ij.ImagePlus;
 import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
 
 
-public class RotationPetation_ implements PlugInFilter {
+public class RotationTest_ implements PlugInFilter {
 	/**
 	 * 
 	 * @param ip image to rotate
@@ -15,9 +15,9 @@ public class RotationPetation_ implements PlugInFilter {
 	 */
 	public static ImageProcessor rotate(ImageProcessor ip, int angle){
 		
-		ImageProcessor dst = new ByteProcessor(ipRotate.getWidth(), ipRotate.getHeight());
+		ImageProcessor dst = new ByteProcessor(ip.getWidth(), ip.getHeight());
 		
-		dst = Rotation.rotate(ip, 45);
+		dst = rotate(ip, 45);
 		return dst;
 	}
 	
