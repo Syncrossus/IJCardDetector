@@ -16,7 +16,6 @@ public class Card {
 	}
 	
 	public ImageProcessor createCardImage(ImageProcessor image, boolean rotate){
-		f
 		return null;
 	}
 }

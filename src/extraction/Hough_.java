@@ -9,6 +9,7 @@ import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
+import tools.Line;
 
 public class Hough_ implements PlugInFilter{
 
