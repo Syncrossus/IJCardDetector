@@ -9,6 +9,7 @@ import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
+import tools.Line;
 
 public class Hough_ implements PlugInFilter{
 
@@ -66,8 +67,8 @@ public class Hough_ implements PlugInFilter{
 			
 			// Ligne verticale
 			if(line.isVertical()){
-				x1 = line.getVerticalStep();
-				x2 = line.getVerticalStep();
+				x1 = line.getXIntercept();
+				x2 = line.getXIntercept();
 				y1 = 0;
 				y2 = image.getHeight()-1;
 			}
