@@ -13,6 +13,7 @@ public class Rotation {
 	 */
 	public static ImageProcessor rotate(ImageProcessor ip, int angle){
 
+		ImageProcessor imgToRotate = new ByteProcessor(ip, true);
 		ImageProcessor ipRotate = new ByteProcessor(ip.getWidth(), ip.getHeight());
 
 		//calcul de l'angle en radian
@@ -32,8 +33,7 @@ public class Rotation {
 				//si le pixel concerné fait bien partie de l'image
 				if(coordX<ip.getWidth() && coordX>=0 && coordY<ip.getHeight() && coordY>=0){
 
-					//on récupère la valeur du pixel
-					int value = ip.getPixel(coordX, coordY);
+					int value = imgToRotate.getPixel(coordX, coordY);
 
 					//on met la valeur de ce pixel dans l'image
 					ipRotate.putPixel(i, j, value);
