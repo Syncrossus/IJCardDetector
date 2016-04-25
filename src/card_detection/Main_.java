@@ -28,13 +28,20 @@ public class Main_ implements PlugInFilter{
 		//Affichage de la detection simple de Hough
 		List<Line> lines = houghFilter.apply();
 		
-		// Affichage de la detection de carte issu de la transformée de Hough
-		Card card = new Card(lines);
-		result = Rotation.rotate(ip, (int)card.getRotationRadius());
-		ImagePlus imp = new ImagePlus("Apres rotation", result);
-        new ImageWindow(imp);
+		// Extraction de la carte
+		try{
+			Card card = new Card(lines);	
+			result = card.extract(ip);
+			// Template matching sur la carte
+		}
+		catch(RuntimeException e){}
+		
+		// Template matching sur l'image générale
+		ImagePlus imp = new ImagePlus("Apres extraction", result);
+		new ImageWindow(imp);
 	}
-
+	
+	
 	@Override
 	public int setup(String arg, ImagePlus imp) {
 		return DOES_ALL;

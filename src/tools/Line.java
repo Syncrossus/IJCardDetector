@@ -3,14 +3,14 @@ package tools;
 import java.awt.Point;
 
 public class Line {
-	private int rho;
+	private double rho;
 	private double theta;
-	private int xIntercept;
-	private int slope;
-	private int yIntercept;
+	private double xIntercept;
+	private double slope;
+	private double yIntercept;
 	private Point[] points = new Point[2];
 	
-	public Line(int rho, double theta){
+	public Line(double rho, double theta){
 		this.rho = rho;
 		this.theta = theta;
 		this.init();
@@ -33,8 +33,8 @@ public class Line {
 			this.xIntercept = (int)(rho*Math.cos(theta));
 		}
 		else{
-			slope = (int) (-Math.cos(theta)/Math.sin(theta));
-			yIntercept = (int) (rho/Math.sin(theta));
+			slope = -Math.cos(theta)/Math.sin(theta);
+			yIntercept =  rho/Math.sin(theta);
 		}
 	}
 	
@@ -56,6 +56,10 @@ public class Line {
 			throw new RuntimeException("Les coordonnées de la droite ont déja été fixées");
 	}
 	
+	public Point[] getCorners(){
+		return points;
+	}
+	
 	public double getLength(){
 		return Math.sqrt(Math.pow(points[0].getX() - points[1].getX(), 2) + Math.pow(points[0].getY() - points[1].getY(), 2));	
 	}
@@ -67,7 +71,7 @@ public class Line {
 	 */
 	public int getY(int x){
 		if (!this.isVertical()){
-			return x*this.slope + this.yIntercept;
+			return (int) (x*this.slope + this.yIntercept);
 		}
 		else{
 			throw new ArithmeticException("Ligne verticale " + this);
@@ -77,21 +81,21 @@ public class Line {
 	/**
 	 * @return the value of the xIntercept attribrute
 	 */
-	public int getXIntercept(){
+	public double getXIntercept(){
 		return this.xIntercept;
 	}
 	
 	/**
 	 * @return the value of the slope attribrute
 	 */
-	public int getSlope() {
+	public double getSlope() {
 		return slope;
 	}
 
 	/**
 	 * @return the value of the yIntercept attribrute
 	 */
-	public int getYIntercept() {
+	public double getYIntercept() {
 		return yIntercept;
 	}
 
@@ -99,7 +103,7 @@ public class Line {
 	/**
 	 * @return the value of the rho attribute
 	 */
-	public int getRho() {
+	public double getRho() {
 		return rho;
 	}
 

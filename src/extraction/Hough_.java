@@ -67,8 +67,8 @@ public class Hough_ implements PlugInFilter{
 			
 			// Ligne verticale
 			if(line.isVertical()){
-				x1 = line.getXIntercept();
-				x2 = line.getXIntercept();
+				x1 = (int) line.getXIntercept();
+				x2 = (int) line.getXIntercept();
 				y1 = 0;
 				y2 = image.getHeight()-1;
 			}

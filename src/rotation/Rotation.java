@@ -11,13 +11,13 @@ public class Rotation {
 	 * @param theta the angle to rotate the image
 	 * This function rotates a card with the equation of a line
 	 */
-	public static ImageProcessor rotate(ImageProcessor ip, int angle){
+	public static ImageProcessor rotate(ImageProcessor ip, double theta){
 
 		ImageProcessor imgToRotate = new ByteProcessor(ip, true);
 		ImageProcessor ipRotate = new ByteProcessor(ip.getWidth(), ip.getHeight());
 
 		//calcul de l'angle en radian
-		double theta =  - angle/(180.0/Math.PI); 
+		//double theta =  - angle/(180.0/Math.PI); 
 
 		//tourne l'image par rapport au centre de l'image d'origine
 		int centerX = ip.getWidth()/2;
