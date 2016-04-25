@@ -8,7 +8,6 @@ import extraction.Hough_;
 import ij.ImagePlus;
 import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
-import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
 import mean.FiltreGaussien_;
 import rotation.Rotation;
