@@ -14,12 +14,12 @@ public class Resizer {
 	 */
 	public static ImageProcessor scale(ImageProcessor src, double factor){
 		if(factor <= 0)
-			throw new IllegalArgumentException("Argument \"factor\" is less than 0.");
+			throw new IllegalArgumentException("Argument \"factor\" is less than 0."+factor);
 		
 		ImageProcessor dst = new ByteProcessor((int)(src.getWidth()*factor), (int)(src.getHeight()*factor)); //creating the destination image with the propoer dimensions
 		
-		for (double i = 0; i < src.getHeight(); i+=1/factor) {
-			for (double j = 0; j < src.getWidth(); j+=1/factor) {
+		for (double i = 0; i < src.getWidth(); i+=1/factor) {
+			for (double j = 0; j < src.getHeight(); j+=1/factor) {
 				dst.putPixel((int)(i*factor), (int)(j*factor), src.getPixel((int)i, (int)j));
 			}
 		}

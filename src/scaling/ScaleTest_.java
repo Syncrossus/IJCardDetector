@@ -15,6 +15,10 @@ public class ScaleTest_ implements PlugInFilter {
         gd.showDialog();
         if (gd.wasCanceled()) return;
         int factor = (int) gd.getNextNumber();
+        
+//        gd=new GenericDialog("Shazbot"+factor);
+//        gd.showDialog();
+        
         new ImageWindow(new ImagePlus("Scaled Image", Resizer.scale(arg0, factor)));
                 
 	}
