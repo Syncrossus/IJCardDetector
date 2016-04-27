@@ -117,7 +117,7 @@ public class Card {
 			}
 		}
 		
-		return result.getTheta();
+		return -result.getTheta();
 	}
 	
 
