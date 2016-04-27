@@ -16,8 +16,8 @@ public class Rotation {
 		ImageProcessor imgToRotate = new ByteProcessor(ip, true);
 		ImageProcessor ipRotate = new ByteProcessor(ip.getWidth(), ip.getHeight());
 
-		//calcul de l'angle en radian
-		//double theta =  - angle/(180.0/Math.PI); 
+		//on prend l'opposé car on part de l'image finale (rotation à l'envers donc)
+		theta =  - theta; 
 
 		//tourne l'image par rapport au centre de l'image d'origine
 		int centerX = ip.getWidth()/2;
