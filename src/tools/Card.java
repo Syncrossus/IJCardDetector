@@ -97,6 +97,7 @@ public class Card {
 						y = line.getY(x);
 					}
 					
+		
 					line.addCorner(new Point(x,y));
 					other.addCorner(new Point(x,y));
 				}
@@ -117,7 +118,7 @@ public class Card {
 			}
 		}
 		
-		return -result.getTheta();
+		return result.getTheta();
 	}
 	
 
@@ -128,7 +129,7 @@ public class Card {
 	 */
 	public void rotate(ImageProcessor ip, double radius){
 		// Rotation des lignes
-		
+		radius = -radius;
 		int centerX = ip.getWidth()/2;
 		int centerY = ip.getHeight()/2;
 		
@@ -155,7 +156,7 @@ public class Card {
 	 */
 	public ImageProcessor extract(ImageProcessor ip){
 		double radius = this.getRotationRadius();
-		ImageProcessor rotated = Rotation.rotate(ip, radius);
+		ImageProcessor rotated = Rotation.rotate(ip, -radius);
 		this.rotate(ip, radius);
 
 		int x1 = Integer.MAX_VALUE, x2 = 0, y1 = Integer.MAX_VALUE, y2 = 1;
