@@ -61,12 +61,19 @@ public class TemplateMatching_ implements PlugInFilter{
 					int coordY = (int)(cc.getPoints().get(0).getY() - decalageY + y);
 					
 					//si ça sort de l'image, on prend le pixel en haut à gauche de l'image
-					if(coordX<0 || coordX>=ip.getWidth()){
+					if(coordX<0) {
 						coordX=0;
 					}
-					if(coordY<0 || coordY>=ip.getHeight()){
+					else if(coordX>=ip.getWidth()){
+						coordX = ip.getWidth()-1;
+					}
+					if(coordY<0 ){
 						coordY=0;
 					}
+					else if(coordY>=ip.getHeight()){
+						coordY = ip.getHeight()-1;
+					}
+					
 					
 					ipBis.putPixel(x, y, ip.getPixel(coordX, coordY));
 				}
