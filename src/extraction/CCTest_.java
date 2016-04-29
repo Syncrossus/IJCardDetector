@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ij.IJ;
 import ij.ImagePlus;
+import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 
@@ -16,9 +17,11 @@ public class CCTest_ implements PlugInFilter{
 		//nombre de composantes connexes de pixels à 255
 		//ArrayList<ConnectedComponent> cc_255 = CCIdentifier.getCC(255, ip);
 		
-		IJ.showMessage("nombre de cc 0 : " + cc_0.size() /*+ " ; nombre de cc 255 : " + cc_255.size()*/);
-
-		
+		for(ConnectedComponent cc : cc_0){
+			ImagePlus imp = new ImagePlus("Affichage composante connexe", cc.createImage(ip));
+			new ImageWindow(imp);
+		}
+	
 	}
 
 	@Override

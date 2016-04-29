@@ -3,6 +3,8 @@ package extraction;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import ij.process.ByteProcessor;
+import ij.process.ImageProcessor;
 import tools.MathTools;
 
 public class ConnectedComponent{
@@ -106,6 +108,9 @@ public class ConnectedComponent{
 		return ys;
 	}
 	
+	/**
+	 * @return the number of pixel in the rectangle
+	 */
 	public double computeCoverage(){
 		Point topLeft = getTopLeft(), bottomRight = getBottomRight();
 		double area = (bottomRight.getX()-topLeft.getX())*(bottomRight.getY()-topLeft.getY());
@@ -141,12 +146,12 @@ public class ConnectedComponent{
 		return new Point(MathTools.min(getXs()), MathTools.max(getYs()));
 	}
 	
-	public double getWidth(){
-		return getTopRight().getX() - getTopLeft().getX();
+	public int getWidth(){
+		return (int) (getTopRight().getX() - getTopLeft().getX());
 	}
 	
-	public double getHeight(){
-		return getBottomLeft().getY() - getTopLeft().getY();
+	public int getHeight(){
+		return (int) (getBottomLeft().getY() - getTopLeft().getY());
 	}
 	
 	public Point getCenter(){
@@ -157,5 +162,19 @@ public class ConnectedComponent{
 	public Point getCentroid(){
 		return new Point(MathTools.average(getXs()), MathTools.average(getYs()));
 	}
-
+	
+	
+	public ImageProcessor createImage(ImageProcessor ip){
+		int cote = (this.getWidth()>this.getHeight())?this.getWidth():this.getHeight();
+		ImageProcessor result = new ByteProcessor(cote,cote);
+		result.setColor(255);
+		result.fill();
+		
+		for(Point point:this.getPoints()){
+			int x = (int) point.getX() - MathTools.min(getXs()), y = (int) point.getY() - MathTools.min(getYs());
+			result.putPixel(x, y, 0);
+		}
+		
+		return result;
+	}
 }
