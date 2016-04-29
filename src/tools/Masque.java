@@ -8,10 +8,10 @@ import ij.process.ImageProcessor;
  */
 public class Masque {
 
-    private double[] contenu;
-    private int rayon;
-    private int largeur;
-    
+	private double[] contenu;
+	private int rayon;
+	private int largeur;
+
     public Masque(ImageProcessor image){
     	this(Math.max(image.getWidth(), image.getHeight()));
 		this.remplirAvec(0); // le masque devant etre carre, il y aura des vides dans le masque si le template est rectangulaire. on remplit donc es vides avec des 0.
@@ -53,6 +53,13 @@ public class Masque {
         }
     }
 
+    /**
+     * @return le contenu du masque sous forme de tableau de reels.
+     */
+    public double[] getContenu() {
+		return contenu;
+	}
+    
     /**
     * Renvoie le rayon (demie-largeur) du masque.
     * @return     Le rayon.
@@ -98,5 +105,9 @@ public class Masque {
     public void put(int x, int y, double valeur) {
         contenu[(y + rayon) * largeur + x + rayon] = valeur;
     }
+
+	public double moyenne() {
+		return tools.MathTools.mean(this.contenu);
+	}
 
 }

@@ -3,6 +3,8 @@ package tools;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import ij.process.ImageProcessor;
+
 public class MathTools{
 	
 	// min
@@ -97,6 +99,38 @@ public class MathTools{
 		return sum/list.size();
 	}
 
+	public static double mean(double[] contenu) {
+		return sum(contenu)/contenu.length;
+	}
+
+	private static double sum(double[] contenu) {
+		double sum = 0;
+		for (double d : contenu)
+			sum+=d;
+		return sum;
+	}
+
+	public static double standardDeviation(ImageProcessor ip) {
+		double[] contenu=new double[ip.getHeight()*ip.getWidth()];
+		for (int i = 0; i < ip.getWidth(); i++) {
+			for (int j = 0; j < ip.getHeight(); j++) {
+				contenu[i*ip.getWidth()+j]=ip.getPixel(i, j);
+			}
+		}
+		return standardDeviation(contenu);
+	}
+
+	public static double standardDeviation(Masque masque) {
+		return standardDeviation(masque.getContenu());
+	}
+
+	public static double standardDeviation(double[] contenu) {
+		double meanValue = mean(contenu);
+		for (int i = 0; i < contenu.length; i++) {
+			contenu[i]=(contenu[i]-meanValue)*(contenu[i]-meanValue);
+		}
+		return Math.sqrt(mean(contenu));
+	}
 	
 
 	
