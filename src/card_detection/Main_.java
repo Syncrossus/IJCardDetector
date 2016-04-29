@@ -31,7 +31,7 @@ public class Main_ implements PlugInFilter{
 		// Extraction de la carte
 
 		Card card = new Card(lines);	
-		result = card.extract(ip);
+		result = card.extractCorner(ip);
 		// Template matching sur la carte	
 
 

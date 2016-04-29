@@ -129,7 +129,6 @@ public class Card {
 	 */
 	public void rotate(ImageProcessor ip, double radius){
 		// Rotation des lignes
-		radius = -radius;
 		int centerX = ip.getWidth()/2;
 		int centerY = ip.getHeight()/2;
 		
@@ -194,6 +193,21 @@ public class Card {
 	}
 
 	
+	public ImageProcessor extractCorner(ImageProcessor ip){
+		ImageProcessor card = this.extract(ip);
+		double COEFF_CORNER_WIDTH = 0.25;
+		double COEFF_CORNER_HEIGHT = 0.35;
+		
+		ImageProcessor result = new ByteProcessor((int) (card.getWidth()*COEFF_CORNER_WIDTH), (int)(card.getHeight()*COEFF_CORNER_HEIGHT));
+		
+		for(int i=0; i<result.getWidth(); i++){
+			for(int j=0; j<result.getHeight(); j++){
+				result.putPixel(i, j, card.getPixel(i,j));
+			}
+		}
+		
+		return result;
+	}
 }
 
 
