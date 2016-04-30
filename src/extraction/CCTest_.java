@@ -18,7 +18,7 @@ public class CCTest_ implements PlugInFilter{
 		//ArrayList<ConnectedComponent> cc_255 = CCIdentifier.getCC(255, ip);
 		
 		for(ConnectedComponent cc : cc_0){
-			ImagePlus imp = new ImagePlus("Affichage composante connexe", cc.createImage(ip));
+			ImagePlus imp = new ImagePlus("Affichage composante connexe", cc.createImage());
 			new ImageWindow(imp);
 		}
 	

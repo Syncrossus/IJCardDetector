@@ -109,7 +109,9 @@ public class ConnectedComponent{
 	}
 	
 	/**
-	 * @return the number of pixel in the rectangle
+	 * @return the proportion of pixels that are part of the CC within the circumscribed rectangle.
+	 * Example : if there are 2 pixels contained in the CC for each pixel not contained in the CC,
+	 * this method will return 2/3, as 2/3 of the circumscribed rectangle will be occupied by the CC.
 	 */
 	public double computeCoverage(){
 		Point topLeft = getTopLeft(), bottomRight = getBottomRight();
@@ -146,32 +148,62 @@ public class ConnectedComponent{
 		return new Point(MathTools.min(getXs()), MathTools.max(getYs()));
 	}
 	
+	/**
+	 * @return The area of the circumscribed rectangle of the shape
+	 */
+	public double getRectArea(){
+		return getWidth()*getHeight();
+	}
+	
+	/**
+	 * @return The area of the circumscribed square of the shape
+	 */
+	public double getSquArea(){
+		return Math.pow(Math.max(getWidth(), getHeight()), 2);
+	}
+	
+	/**
+	 * @return the width of the shape
+	 */
 	public int getWidth(){
 		return (int) (getTopRight().getX() - getTopLeft().getX());
 	}
 	
+	/**
+	 * @return the height of the shape
+	 */
 	public int getHeight(){
 		return (int) (getBottomLeft().getY() - getTopLeft().getY());
 	}
 	
+	/**
+	 * @return the center pixel of the shape (may not be contained within the actual shape if, for example, the shape is in the form of a ring)
+	 */
 	public Point getCenter(){
 		Point topLeft = getTopLeft();
 		return new Point((int) (topLeft.getX()+(getWidth()/2)), (int) (topLeft.getY()+(getHeight()/2)));
 	}
 	
+	/**
+	 * @return the centroid of the shape : the point of average coordinates (may not be contained within the actual shape if, for example, the shape is in the form of a ring)
+	 */
 	public Point getCentroid(){
 		return new Point(MathTools.average(getXs()), MathTools.average(getYs()));
 	}
 	
-	
-	public ImageProcessor createImage(ImageProcessor ip){
+	/**
+	 * @return a square image containing only the connected component in black on a white background
+	 */
+	public ImageProcessor createImage(){
 		int cote = (this.getWidth()>this.getHeight())?this.getWidth():this.getHeight();
 		ImageProcessor result = new ByteProcessor(cote,cote);
 		result.setColor(255);
 		result.fill();
 		
+		double minX = MathTools.min(getXs()), minY = MathTools.min(getYs());
+		
 		for(Point point:this.getPoints()){
-			int x = (int) point.getX() - MathTools.min(getXs()), y = (int) point.getY() - MathTools.min(getYs());
+			int x = (int) (point.getX() - minX), y = (int) (point.getY() - minY);
 			result.putPixel(x, y, 0);
 		}
 		
