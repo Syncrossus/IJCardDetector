@@ -132,7 +132,7 @@ public class MathTools{
 	 * @param values : a set of real values
 	 * @return the sum of the set of values
 	 */
-	private static double sum(double... values) {
+	public static double sum(double... values) {
 		double sum = 0;
 		for (double d : values)
 			sum+=d;
