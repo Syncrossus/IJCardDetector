@@ -107,7 +107,7 @@ public class Masque {
     }
 
 	public double moyenne() {
-		return tools.MathTools.mean(this.contenu);
+		return tools.MathTools.average(this.contenu);
 	}
 
 }

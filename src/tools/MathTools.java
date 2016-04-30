@@ -8,6 +8,10 @@ import ij.process.ImageProcessor;
 public class MathTools{
 	
 	// min
+	
+	/**
+	 * @return the min value of the set of arguments
+	 */
 	public static double min(double... args){
 		double min=args[0];
 		for (double d : args) {
@@ -16,6 +20,9 @@ public class MathTools{
 		return min;
 	}
 	
+	/**
+	 * @return the min value of the set of arguments
+	 */
 	public static float min(float... args){
 		double[] newArray = new double[args.length];
 		for (int i = 0; i < args.length; i++) {
@@ -24,6 +31,9 @@ public class MathTools{
 		return (float) min(newArray);
 	}
 	
+	/**
+	 * @return the min value of the set of arguments
+	 */
 	public static long min(long... args){
 		double[] newArray = new double[args.length];
 		for (int i = 0; i < args.length; i++) {
@@ -32,6 +42,9 @@ public class MathTools{
 		return (long) min(newArray);
 	}
 	
+	/**
+	 * @return the min value of the set of arguments
+	 */
 	public static int min(int... args){
 		double[] newArray = new double[args.length];
 		for (int i = 0; i < args.length; i++) {
@@ -40,6 +53,9 @@ public class MathTools{
 		return (int) min(newArray);
 	}
 	
+	/**
+	 * @return the min value of the set of arguments
+	 */
 	public static int min(ArrayList<Integer> list){
 		int[] array = new int[list.size()];
 		Iterator<Integer> it = list.iterator();
@@ -50,6 +66,9 @@ public class MathTools{
 	}
 	
 	//max
+	/**
+	 * @return the max value of the set of arguments
+	 */
 	public static double max(double... args){
 		double max=args[0];
 		for (double d : args) {
@@ -58,6 +77,9 @@ public class MathTools{
 		return max;
 	}
 	
+	/**
+	 * @return the max value of the set of arguments
+	 */
 	public static float max(float... args){
 		double[] newArray = new double[args.length];
 		for (int i = 0; i < args.length; i++) {
@@ -66,6 +88,9 @@ public class MathTools{
 		return (float) max(newArray);
 	}
 	
+	/**
+	 * @return the max value of the set of arguments
+	 */
 	public static long max(long... args){
 		double[] newArray = new double[args.length];
 		for (int i = 0; i < args.length; i++) {
@@ -74,6 +99,9 @@ public class MathTools{
 		return (long) max(newArray);
 	}
 	
+	/**
+	 * @return the max value of the set of arguments
+	 */
 	public static int max(int... args){
 		double[] newArray = new double[args.length];
 		for (int i = 0; i < args.length; i++) {
@@ -82,6 +110,9 @@ public class MathTools{
 		return (int) max(newArray);
 	}
 	
+	/**
+	 * @return the max value of the set of arguments
+	 */
 	public static int max(ArrayList<Integer> list){
 		int[] array = new int[list.size()];
 		Iterator<Integer> it = list.iterator();
@@ -91,45 +122,77 @@ public class MathTools{
 		return max(array);
 	}
 
+	/**
+	 * @param list : an ArrayList of Integers
+	 * @return the average value of the list (may not be contained in the list)
+	 */
 	public static int average(ArrayList<Integer> list) {
-		int sum = 0;
-		for (Integer i : list) {
-			sum+=i.intValue();
+		double[] values = new double[list.size()];
+		for (int i = 0; i < list.size(); i++) {
+			values[i]=list.get(i);
 		}
-		return sum/list.size();
+		return (int) average(values);
 	}
 
-	public static double mean(double[] contenu) {
-		return sum(contenu)/contenu.length;
+	/**
+	 * @param values : a set of real values
+	 * @return the average value of the set of values (may not be contained in the argument set)
+	 */
+	public static double average(double... values) {
+		return sum(values)/values.length;
 	}
 
-	private static double sum(double[] contenu) {
+	/**
+	 * @param values : a set of real values
+	 * @return the sum of the set of values
+	 */
+	private static double sum(double[] values) {
 		double sum = 0;
-		for (double d : contenu)
+		for (double d : values)
 			sum+=d;
 		return sum;
 	}
 
-	public static double standardDeviation(ImageProcessor ip) {
-		double[] contenu=new double[ip.getHeight()*ip.getWidth()];
-		for (int i = 0; i < ip.getWidth(); i++) {
-			for (int j = 0; j < ip.getHeight(); j++) {
-				contenu[i*ip.getWidth()+j]=ip.getPixel(i, j);
+	/**
+	 * @param image : an image
+	 * @return the standard deviation of the pixel values in the image
+	 */
+	public static double standardDeviation(ImageProcessor image) {
+		double[] contenu=new double[image.getHeight()*image.getWidth()];
+		for (int i = 0; i < image.getWidth(); i++) {
+			for (int j = 0; j < image.getHeight(); j++) {
+				contenu[i*image.getWidth()+j]=image.getPixel(i, j);
 			}
 		}
 		return standardDeviation(contenu);
 	}
 
-	public static double standardDeviation(Masque masque) {
-		return standardDeviation(masque.getContenu());
+	/**
+	 * @param mask : a convolution mask
+	 * @return the standard deviation of the pixel values in the mask
+	 */
+	public static double standardDeviation(Masque mask) {
+		return standardDeviation(mask.getContenu());
 	}
 
-	public static double standardDeviation(double[] contenu) {
-		double meanValue = mean(contenu);
-		for (int i = 0; i < contenu.length; i++) {
-			contenu[i]=(contenu[i]-meanValue)*(contenu[i]-meanValue);
+	/**
+	 * @param values : a set of values
+	 * @return the standard deviation of the set of values
+	 */
+	public static double standardDeviation(double... values) {
+		return Math.sqrt(variance(values));
+	}
+	
+	/**
+	 * @param values : a set of values
+	 * @return the variance of the set of values
+	 */
+	public static double variance(double... values) {
+		double meanValue = average(values);
+		for (int i = 0; i < values.length; i++) {
+			values[i]=(values[i]-meanValue)*(values[i]-meanValue);
 		}
-		return Math.sqrt(mean(contenu));
+		return average(values);
 	}
 	
 
