@@ -7,8 +7,9 @@ import ij.process.ImageProcessor;
 
 public class MathTools{
 	
-	// min
-	
+	/*===============================================================*/
+	/*==============================MIN==============================*/
+	/*===============================================================*/
 	/**
 	 * @return the min value of the set of arguments
 	 */
@@ -65,7 +66,9 @@ public class MathTools{
 		return min(array);
 	}
 	
-	//max
+	/*===============================================================*/
+	/*==============================MAX==============================*/
+	/*===============================================================*/
 	/**
 	 * @return the max value of the set of arguments
 	 */
@@ -115,13 +118,27 @@ public class MathTools{
 	 */
 	public static int max(ArrayList<Integer> list){
 		int[] array = new int[list.size()];
-		Iterator<Integer> it = list.iterator();
-		for (int i = 0; i < array.length; i++) {
-			array[i]=it.next().intValue();
+		for (int i = 0; i < list.size(); i++) {
+			array[i]=list.get(i);
 		}
 		return max(array);
 	}
 
+	/*================================================================*/
+	/*===========================STATISTICS===========================*/
+	/*================================================================*/
+	
+	/**
+	 * @param values : a set of real values
+	 * @return the sum of the set of values
+	 */
+	private static double sum(double... values) {
+		double sum = 0;
+		for (double d : values)
+			sum+=d;
+		return sum;
+	}
+	
 	/**
 	 * @param list : an ArrayList of Integers
 	 * @return the average value of the list (may not be contained in the list)
@@ -143,14 +160,15 @@ public class MathTools{
 	}
 
 	/**
-	 * @param values : a set of real values
-	 * @return the sum of the set of values
+	 * @param values : a set of values
+	 * @return the variance of the set of values
 	 */
-	private static double sum(double[] values) {
-		double sum = 0;
-		for (double d : values)
-			sum+=d;
-		return sum;
+	public static double variance(double... values) {
+		double meanValue = average(values);
+		for (int i = 0; i < values.length; i++) {
+			values[i]=(values[i]-meanValue)*(values[i]-meanValue);
+		}
+		return average(values);
 	}
 
 	/**
@@ -182,19 +200,5 @@ public class MathTools{
 	public static double standardDeviation(double... values) {
 		return Math.sqrt(variance(values));
 	}
-	
-	/**
-	 * @param values : a set of values
-	 * @return the variance of the set of values
-	 */
-	public static double variance(double... values) {
-		double meanValue = average(values);
-		for (int i = 0; i < values.length; i++) {
-			values[i]=(values[i]-meanValue)*(values[i]-meanValue);
-		}
-		return average(values);
-	}
-	
-
-	
+		
 }
