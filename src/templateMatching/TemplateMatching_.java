@@ -1,13 +1,93 @@
 package templateMatching;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import binarisation.Otsu_;
+import extraction.CCIdentifier;
+import extraction.ConnectedComponent;
 import ij.IJ;
 import ij.ImagePlus;
 import ij.io.Opener;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
+import scaling.Resizer;
 import tools.Convolution;
 
 public class TemplateMatching_ implements PlugInFilter{
+	
+	private List<ImagePlus> templates = new ArrayList<ImagePlus>();
+	private double size;
+	
+	public TemplateMatching_(){
+		this.initTemplates("src/image");
+	}
+	
+	/** 
+	 * Inits the templates attributes.
+	 * Create an ImagePlus object for each template in the given directory
+	 * @params path the relative path of the directory containing the templates
+	 */
+	private void initTemplates(String path){
+		Opener opener = new Opener();  
+		File dir = new File(path);
+		File[] files = dir.listFiles();
+		for(File file:files){
+			ImagePlus imp = opener.openImage(file.getAbsolutePath());
+			// Tant qu'on a pas des images en noir et blanc, c'est provisoire mais ça permet de faire le café
+			// Mais pour du code évolutif, cette ligne a rien à faire la. 
+			// L'utilisateur est libre de faire du template matching par niveau de gris ou non.
+			imp.setProcessor(Otsu_.apply(imp.getProcessor()));
+			
+			imp.setTitle(file.getName());
+			templates.add(imp);
+		}
+		
+		size = templates.get(0).getWidth();
+	}
+	
+	/**
+	 * Match the given ConnectedComponent with all the template and return the string corresponding to the best match
+	 * @param cc the given connected component
+	 * @return the name of the template which gave the best match with the cc.
+	 */
+	public String matchCC(ConnectedComponent cc){
+		ImageProcessor image = cc.createImage();
+		image = Resizer.scale(image, size/image.getWidth());
 
+		double vote = Double.MIN_VALUE;
+		String result = null;
+		
+		for(ImagePlus template:templates){
+			double value = Convolution.correlationCroisee(template.getProcessor(), image);
+			if(value>vote){
+				result = template.getTitle();
+				vote = value;
+			}
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Runs the template matching on the given image
+	 */
+	public void run(ImageProcessor ip){
+		List<ConnectedComponent> ccs = CCIdentifier.getCC(0, ip);
+		String result = "";
+		for(ConnectedComponent cc:ccs){
+			String match = matchCC(cc);
+			if(match != null){
+				result += " " + match;
+			}
+		}
+		
+		IJ.showMessage(result);
+	}
+	
+	/**
+	 * Obsolète, mais peut servir. Autant le garder tant qu'on a pas une architecture fixe.
+	 */
 	private static double startTemplateMatching(ImageProcessor ip, ImageProcessor template){
 
 		/*//pourcentage de la ccn obtenu
@@ -83,287 +163,6 @@ public class TemplateMatching_ implements PlugInFilter{
 
 		return percent;*/
 		return Convolution.correlationCroisee(template, ip);
-	}
-
-
-	@Override
-	public void run(ImageProcessor ip) {
-		//on l'applique pour chaque template et on garde celui ayant le meilleur résultat
-		String fig = "";
-		String num = "";
-
-		double figure = 0;
-		double number = 0;
-		
-		
-		//*********************************************************************************//
-		//FIGURE
-		
-		//TREFLE
-		try{
-
-			fig = "trefle";
-			double trefle = startTemplateMatching(ip, loadImg("src/image/trefle.png"));
-			figure = trefle;
-
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template trefle");
-		}
-
-		//PIQUE
-		try{
-
-			double pique = startTemplateMatching(ip, loadImg("src/image/pic.png"));
-
-			if(pique>figure){
-				figure = pique;
-				fig = "pique";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template pique");
-		}
-
-		//COEUR
-		try{
-
-			double coeur = startTemplateMatching(ip, loadImg("src/image/coeur.png"));
-
-			if(coeur>figure){
-				figure = coeur;
-				fig = "coeur";
-			}
-
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template coeur");
-		}
-
-		//CARREAU
-		try{
-
-			double carreau = startTemplateMatching(ip, loadImg("src/image/carreau.png"));
-			if(carreau>figure){
-				figure = carreau;
-				fig = "carreau";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template carreau");
-		}
-
-		//*********************************************************************************//
-		
-		
-		
-		
-		
-		
-		//*********************************************************************************//
-		//NOMBRES
-		
-		//AS
-		try{
-			double as = startTemplateMatching(ip, loadImg("src/image/ace.png"));
-			number = as;
-			num = "As de ";
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template as");
-		}
-		
-		//DEUX
-		try{
-			double deux = startTemplateMatching(ip, loadImg("src/image/2.png"));
-			if(deux>number){
-				number = deux;
-				num = "Deux de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 2");
-		}
-		
-		//TROIS
-		try{
-			double trois = startTemplateMatching(ip, loadImg("src/image/3.png"));
-			if(trois>number){
-				number = trois;
-				num = "Trois de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 3");
-		}
-		
-		//QUATRE
-		try{
-			double quatre = startTemplateMatching(ip, loadImg("src/image/4.png"));
-			if(quatre>number){
-				number = quatre;
-				num = "Quatre de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 4");
-		}
-		
-		//CINQ
-		try{
-			double cinq = startTemplateMatching(ip, loadImg("src/image/5.png"));
-			if(cinq>number){
-				number = cinq;
-				num = "Cinq de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 5");
-		}
-		
-		//SIX
-		try{
-			double six = startTemplateMatching(ip, loadImg("src/image/6.png"));
-			if(six>number){
-				number = six;
-				num = "Six de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 6");
-		}
-		
-		//SEPT
-		try{
-			double sept = startTemplateMatching(ip, loadImg("src/image/7.png"));
-			if(sept>number){
-				number = sept;
-				num = "Sept de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 7");
-		}
-		
-		
-		//HUIT
-		try{
-			double huit = startTemplateMatching(ip, loadImg("src/image/8.png"));
-			if(huit>number){
-				number = huit;
-				num = "Huit de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 8");
-		}
-		
-		//NEUF
-		try{
-			double neuf = startTemplateMatching(ip, loadImg("src/image/9.png"));
-			if(neuf>number){
-				number = neuf;
-				num = "Neuf de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 9");
-		}
-		
-		//DIX
-		try{
-			double un = startTemplateMatching(ip, loadImg("src/image/0.png"));
-			double zero = startTemplateMatching(ip, loadImg("src/image/1.png"));
-			if((zero + un)/2>number){
-				number = (zero + un)/2;
-				num = "Dix de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template 10");
-		}
-		
-		//VALET
-		try{
-			double v = startTemplateMatching(ip, loadImg("src/image/valet.png"));
-			if(v>number){
-				number = v;
-				num = "Valet de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template valet");
-		}
-		
-		//DAME
-		try{
-			double d = startTemplateMatching(ip, loadImg("src/image/dame.png"));
-			if(d>number){
-				number = d;
-				num = "Dame de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template dame");
-		}
-		
-		//ROI
-		try{
-			double r = startTemplateMatching(ip, loadImg("src/image/roi.png"));
-			if(r>number){
-				number = r;
-				num = "Roi de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template roi");
-		}
-		
-		//JACK
-		try{
-			double j = startTemplateMatching(ip, loadImg("src/image/jack.png"));
-			if(j>number){
-				number = j;
-				num = "Valet de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template jack");
-		}
-		
-		//QUEEN
-		try{
-			double q = startTemplateMatching(ip, loadImg("src/image/queen.png"));
-			if(q>number){
-				number = q;
-				num = "Dame de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template queen");
-		}
-		
-		//KING
-		try{
-			double k = startTemplateMatching(ip, loadImg("src/image/king.png"));
-			if(k>number){
-				number = k;
-				num = "Roi de ";
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-			IJ.showMessage("Une erreur est survenue pour le template king");
-		}
-		//*********************************************************************************//
-		
-		//AFFICHAGE DU RESULTAT OBTENU
-		IJ.showMessage(num + fig);
-	}
-
-	private static ImageProcessor loadImg(String url){
-		Opener opener = new Opener();  
-		ImagePlus imp = opener.openImage(url);
-		return imp.getProcessor();
 	}
 
 	@Override

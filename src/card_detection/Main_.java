@@ -10,7 +10,7 @@ import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import mean.FiltreGaussien_;
-import rotation.Rotation;
+import templateMatching.TemplateMatching_;
 import tools.Card;
 import tools.Line;
 
@@ -38,6 +38,10 @@ public class Main_ implements PlugInFilter{
 		// Template matching sur l'image générale
 		ImagePlus imp = new ImagePlus("Apres extraction", result);
 		new ImageWindow(imp);
+		
+		result = Otsu_.apply(result);
+		TemplateMatching_ matcher = new TemplateMatching_();
+		matcher.run(result);
 	}
 
 
