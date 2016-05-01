@@ -118,7 +118,33 @@ public class Convolution {
 		// Nous allons donc utiliser la convolution, et symétriser notre masque avant pour compenser la symétrisation de la convolution.
 		// Nous symmetrisons le masque lors de sa création (le constructeur de Masque(ImageProcessor) le fait pour nous)
 		Masque m = new Masque(template);
-		return appliquerMasque(image, m, image.getWidth()/2, image.getHeight()/2);
+		
+		int rayon = m.getRayon();
+		double valeur = 0;
+
+		for(int i=-rayon; i<=rayon; i++){
+			for(int j=-rayon; j<=rayon; j++){
+				int x = image.getWidth()/2+i,  y = image.getHeight()/2+j;
+
+				if(x<0){
+					x=0;
+				}
+				else if(x>image.getWidth()-1){
+					x = image.getWidth()-1;
+				}
+
+				if(y<0){
+					y=0;
+				}
+				else if(y>image.getHeight()-1){
+					y = image.getHeight()-1;
+				}
+				
+				valeur += (image.getPixel(x,y)*2-255)*(m.get(-i, -j)*2-255); //*2-255 to recenter between -255 and 255 (if not, color mismatches don't penalize match value)
+			}
+		}
+
+		return valeur;
 		//return Convolution.convoluer(image, m);
 	}
 	
