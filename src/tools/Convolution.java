@@ -117,8 +117,7 @@ public class Convolution {
 		// La correlation croisee est une convolution sans symétrisation.
 		// Nous allons donc utiliser la convolution, et symétriser notre masque avant pour compenser la symétrisation de la convolution.
 		// Nous symmetrisons le masque lors de sa création (le constructeur de Masque(ImageProcessor) le fait pour nous)
-		Masque m = new Masque(template);
-		
+		Masque m = new Masque(template);		
 		int rayon = m.getRayon();
 		double valeur = 0;
 

@@ -8,11 +8,13 @@ import extraction.CCIdentifier;
 import extraction.ConnectedComponent;
 import ij.IJ;
 import ij.ImagePlus;
+import ij.gui.ImageWindow;
 import ij.io.Opener;
 import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import scaling.Resizer;
 import tools.Convolution;
+import tools.Masque;
 
 public class TemplateMatching_ implements PlugInFilter{
 	
@@ -53,19 +55,26 @@ public class TemplateMatching_ implements PlugInFilter{
 	 */
 	public String matchCC(ConnectedComponent cc){
 		ImageProcessor image = cc.createImage();
-		image = Resizer.scale(image, size/image.getWidth());
-
-		double vote = Double.MIN_VALUE;
+		
+		//image = Resizer.scale(image, size/image.getWidth());
+		ImagePlus imp = new ImagePlus("Connected Component", image);
+		new ImageWindow(imp);
+		
+		double max = - Double.MAX_VALUE;
 		String result = null;
 		
 		for(ImagePlus template:templates){
+			
+			double scale = (double)(template.getProcessor().getWidth())/image.getWidth();
+			image = Resizer.scale(image, scale);
 			double value = Convolution.correlationCroisee(template.getProcessor(), image);
-			if(value>vote){
+			if(value>max){
 				result = template.getTitle();
-				vote = value;
+				max = value;
 			}
 		}
 		
+		IJ.showMessage(result + ": " + max);
 		return result;
 	}
 	
