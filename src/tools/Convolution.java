@@ -147,6 +147,23 @@ public class Convolution {
 		//return Convolution.convoluer(image, m);
 	}
 	
+	public static double getPercent(ImageProcessor template, ImageProcessor image){
+		int nbPixel = 0, pixel = 0;
+		for(int i = 0;i<template.getWidth();i++){
+			for(int j = 0; j<template.getHeight();j++){
+				try{
+					if(template.getPixel(i, j) == image.getPixel(i, j))
+						pixel++;
+					nbPixel++;
+				}
+				catch(Exception e){
+					//erreur si images pas de la même taille et qu'on sort de "image"
+				}
+			}
+		}
+		return (pixel/nbPixel) * 100;
+	}
+	
 	/**
 	 * @param template : a template image to find in the target image
 	 * @param image : the image in which to search for the template

@@ -171,7 +171,8 @@ public class TemplateMatching_ implements PlugInFilter{
 		}//fin for cc
 
 		return percent;*/
-		return Convolution.correlationCroisee(template, ip);
+		//return Convolution.correlationCroisee(template, ip);
+		return Convolution.getPercent(template, ip);
 	}
 
 	@Override
