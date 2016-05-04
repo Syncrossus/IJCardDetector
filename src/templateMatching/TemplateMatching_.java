@@ -14,7 +14,6 @@ import ij.plugin.filter.PlugInFilter;
 import ij.process.ImageProcessor;
 import scaling.Resizer;
 import tools.Convolution;
-import tools.Masque;
 
 public class TemplateMatching_ implements PlugInFilter{
 	
@@ -60,14 +59,14 @@ public class TemplateMatching_ implements PlugInFilter{
 		ImagePlus imp = new ImagePlus("Connected Component", image);
 		new ImageWindow(imp);
 		
+		double scale = size/image.getWidth();
+		image = Resizer.scale(image, scale);
+		
 		double max = - Double.MAX_VALUE;
 		String result = null;
 		
 		for(ImagePlus template:templates){
-			
-			double scale = (double)(template.getProcessor().getWidth())/image.getWidth();
-			image = Resizer.scale(image, scale);
-			double value = Convolution.correlationCroisee(template.getProcessor(), image);
+			double value = Convolution.getPercent(template.getProcessor(), image);
 			if(value>max){
 				result = template.getTitle();
 				max = value;
@@ -75,6 +74,10 @@ public class TemplateMatching_ implements PlugInFilter{
 		}
 		
 		IJ.showMessage(result + ": " + max);
+		if(max<60){
+			result = null;
+		}
+		
 		return result;
 	}
 	

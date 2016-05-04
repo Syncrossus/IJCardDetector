@@ -148,9 +148,10 @@ public class Convolution {
 	}
 	
 	public static double getPercent(ImageProcessor template, ImageProcessor image){
-		int nbPixel = 0, pixel = 0;
-		for(int i = 0;i<template.getWidth();i++){
-			for(int j = 0; j<template.getHeight();j++){
+		double nbPixel = 0, pixel = 0;
+		
+		for(int i = 0; i<template.getWidth(); i++){
+			for(int j = 0; j<template.getHeight(); j++){
 				try{
 					if(template.getPixel(i, j) == image.getPixel(i, j))
 						pixel++;
