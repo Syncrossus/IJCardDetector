@@ -148,21 +148,47 @@ public class Convolution {
 	}
 	
 	public static double getPercent(ImageProcessor template, ImageProcessor image){
-		double nbPixel = 0, pixel = 0;
+		double pixelBlanc = 0 , pixelNoir = 0;
+		double nbPixelBlancTemplate = 0, nbPixelBlancImage = 0;
+		double nbPixelNoirTemplate = 0, nbPixelNoirImage = 0;
 		
 		for(int i = 0; i<template.getWidth(); i++){
 			for(int j = 0; j<template.getHeight(); j++){
 				try{
-					if(template.getPixel(i, j) == image.getPixel(i, j))
-						pixel++;
-					nbPixel++;
+					if(template.getPixel(i, j) == image.getPixel(i, j)){
+						if(template.getPixel(i, j) == 0){
+							pixelNoir++;
+							nbPixelNoirTemplate++;
+							nbPixelNoirImage++;
+						}
+						else if(template.getPixel(i,j) == 255){
+							pixelBlanc++;
+							nbPixelBlancTemplate++;
+							nbPixelBlancImage++;
+						}
+					}
+					
+					else{
+						if (template.getPixel(i, j) == 0){
+							nbPixelNoirTemplate++;
+							nbPixelBlancImage++;
+						}
+						else{
+							nbPixelBlancTemplate++;
+							nbPixelNoirImage++;
+						}
+					}
 				}
 				catch(Exception e){
 					//erreur si images pas de la même taille et qu'on sort de "image"
 				}
 			}
 		}
-		return (pixel/nbPixel) * 100;
+		
+		double nbPixelNoir = (nbPixelNoirImage<nbPixelNoirTemplate)? nbPixelNoirTemplate:nbPixelNoirImage;
+		double nbPixelBlanc = (nbPixelBlancImage<nbPixelBlancTemplate)? nbPixelBlancTemplate:nbPixelBlancTemplate;
+		
+		return (2*((pixelNoir/nbPixelNoir) * 100) + ((pixelBlanc/nbPixelBlanc)*100))/3;
 	}
 	
 	/**
