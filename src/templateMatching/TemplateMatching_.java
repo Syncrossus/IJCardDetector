@@ -11,7 +11,10 @@ import ij.ImagePlus;
 import ij.gui.ImageWindow;
 import ij.io.Opener;
 import ij.plugin.filter.PlugInFilter;
+import ij.process.ByteProcessor;
 import ij.process.ImageProcessor;
+import morpho.ElementStructurant;
+import morpho.Morpho;
 import scaling.Resizer;
 import tools.Convolution;
 
@@ -53,7 +56,10 @@ public class TemplateMatching_ implements PlugInFilter{
 	 * @return the name of the template which gave the best match with the cc.
 	 */
 	public String matchCC(ConnectedComponent cc){
-		ImageProcessor image = cc.createImage();
+		ImageProcessor temp = cc.createImage();
+		
+		ImageProcessor image = new ByteProcessor(temp, true);
+		Morpho.fermeture(temp, ElementStructurant.creerRectangleCentre(3, 3), image);
 		
 		//image = Resizer.scale(image, size/image.getWidth());
 		ImagePlus imp = new ImagePlus("Connected Component", image);

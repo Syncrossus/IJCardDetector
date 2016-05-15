@@ -18,8 +18,8 @@ public class Main_ implements PlugInFilter{
 	@Override
 	public void run(ImageProcessor ip) {
 
-		ImageProcessor result  = FiltreGaussien_.apply(ip, 3);
-		result = Otsu_.apply(result);	 
+		ip  = FiltreGaussien_.apply(ip, 3);
+		ImageProcessor result = Otsu_.apply(ip);	 
 		// Extraction de la carte
 		
 		Canny_ cannyFilter = new Canny_(result);
