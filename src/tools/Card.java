@@ -197,11 +197,12 @@ public class Card {
 		ImageProcessor card = this.extract(ip);
 		double COEFF_CORNER_WIDTH = 0.15;
 		double COEFF_CORNER_HEIGHT = 0.30;
-		double COEFF_CORNER_START = 0.20;
+		double COEFF_CORNER_START_WIDTH = 0.20;
+		double COEFF_CORNER_START_HEIGHT= 0.10;
 		
 		ImageProcessor result = new ByteProcessor((int) (card.getWidth()*COEFF_CORNER_WIDTH), (int)(card.getHeight()*COEFF_CORNER_HEIGHT));
-		int x = (int) (result.getWidth()*COEFF_CORNER_START);
-		int y = (int) (result.getWidth()*COEFF_CORNER_START);
+		int x = (int) (result.getWidth()*COEFF_CORNER_START_WIDTH);
+		int y = (int) (result.getHeight()*COEFF_CORNER_START_HEIGHT);
 		
 		for(int i=x; i<result.getWidth()+x; i++){
 			for(int j=y; j<result.getHeight()+y; j++){

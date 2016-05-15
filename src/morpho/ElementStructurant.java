@@ -68,7 +68,7 @@ public class ElementStructurant {
         int ymin = ymax - hauteur + 1;
 
         ElementStructurant es = new ElementStructurant(xmin, xmax, ymin, ymax);
-        es.remplirAvec(AVANT_PLAN);
+        es.remplirAvec(ARRIERE_PLAN);
 
         return es;
     }
@@ -177,7 +177,6 @@ public class ElementStructurant {
                 " ElementStructurant.ARRIERE_PLAN et ElementStructurant.INDEFINI");
 
         contenu[(y - ymin) * largeur + x - xmin] = valeur;
-
     }
 
     /**
@@ -194,7 +193,6 @@ public class ElementStructurant {
                 " ElementStructurant.ARRIERE_PLAN et ElementStructurant.INDEFINI");
 
         Arrays.fill(contenu, valeur);
-
     }
 
     /**

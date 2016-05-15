@@ -133,23 +133,21 @@ public class Morpho {
     * @param es   Elément structurant
     * @param out  Image de sortie
     */
-    public static void dilatation(ImageProcessor in, ElementStructurant es,
-                                  ImageProcessor out) {
-
+    public static void dilatation(ImageProcessor in, ElementStructurant es, ImageProcessor out) {
         verifie(in, out);
-
+        
         for(int i=0; i<in.getWidth(); i++){
-        	for(int j=0; j<in.getHeight(); i++){
+        	for(int j=0; j<in.getHeight(); j++){
         		out.putPixel(i, j, Morpho.getValeurDilate(in, es, i, j));
         	}
         }
     }
     
     public static int getValeurDilate(ImageProcessor in, ElementStructurant es, int i, int j){
-    	int value = 0;
+    	int value = 255;
     	
-    	for(int x=es.getXmin(); x<es.getXmax(); x++){
-			for(int y=es.getYmin(); y<es.getYmin(); y++){
+    	for(int x = es.getXmin(); x<es.getXmax(); x++){
+			for(int y = es.getYmin(); y<es.getYmax(); y++){
 				int col = i+x, line=j+y;
 				if(col < 0){
 					col = 0;
@@ -165,8 +163,8 @@ public class Morpho {
 					line = in.getHeight() - 1;
 				}
 				
-				if(in.getPixel(col, line) == 255 || es.get(x, y) == 255){
-					value = 255;
+				if(in.getPixel(col, line) == 0 && es.get(x, y) == 0){
+					return 0;
 				}
 			}
 		}
@@ -186,9 +184,8 @@ public class Morpho {
 
         verifie(in, out);
 
-
         for(int i=0; i<in.getWidth(); i++){
-        	for(int j=0; j<in.getHeight(); i++){
+        	for(int j=0; j<in.getHeight(); j++){
         		out.putPixel(i, j, Morpho.getValeurErrode(in, es, i, j));
         	}
         }
@@ -196,11 +193,12 @@ public class Morpho {
 
     
     public static int getValeurErrode(ImageProcessor in, ElementStructurant es, int i, int j){
-    	int value = 255;
+    	int value = 0;
     	
     	for(int x=es.getXmin(); x<es.getXmax(); x++){
-			for(int y=es.getYmin(); y<es.getYmin(); y++){
-				int col = i+x, line=j+y;
+			for(int y=es.getYmin(); y<es.getYmax(); y++){
+				int col = i+x, line = j+y;
+				
 				if(col < 0){
 					col = 0;
 				}
@@ -212,11 +210,11 @@ public class Morpho {
 					line = 0;
 				}
 				else if(line>in.getHeight()-1){
-					line = in.getHeight() - 1;
+					line = in.getHeight()- 1;
 				}
 				
-				if(in.getPixel(col, line) == 0 || es.get(x, y) == 0){
-					value = 0;
+				if(in.getPixel(col, line) == 255 || es.get(x, y) == 255){
+					value = 255;
 				}
 			}
 		}

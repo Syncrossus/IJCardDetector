@@ -24,7 +24,7 @@ public class TemplateMatching_ implements PlugInFilter{
 	private double size;
 	
 	public TemplateMatching_(){
-		this.initTemplates("src/image");
+		this.initTemplates("plugins/image");
 	}
 	
 	/** 
@@ -57,9 +57,9 @@ public class TemplateMatching_ implements PlugInFilter{
 	 */
 	public String matchCC(ConnectedComponent cc){
 		ImageProcessor temp = cc.createImage();
-		
 		ImageProcessor image = new ByteProcessor(temp, true);
-		Morpho.fermeture(temp, ElementStructurant.creerRectangleCentre(3, 3), image);
+		
+		Morpho.fermeture(temp, ElementStructurant.creerRectangleCentre(3, 3), image);	
 		
 		//image = Resizer.scale(image, size/image.getWidth());
 		ImagePlus imp = new ImagePlus("Connected Component", image);
