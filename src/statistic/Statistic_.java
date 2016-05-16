@@ -12,11 +12,8 @@ import ij.process.ImageProcessor;
 public class Statistic_ implements PlugInFilter{
 
 	public Statistic_(){
-<<<<<<< HEAD
 		this.initImageRef("dataset/personnel/Hugo_Martin");
-=======
 		this.initImageRef("dataset/image_resized");
->>>>>>> origin/master
 	}
 
 	private void initImageRef(String path){
@@ -32,10 +29,8 @@ public class Statistic_ implements PlugInFilter{
 		int nbCards = 0;
 
 		for(File file:files){
-
 			//**********************************************************************************//
 			// APPLICATION TEMPLATE MATCHING
-
 			ImagePlus implus = opener.openImage(file.getAbsolutePath());
 			String cardResult = Main_.launch(implus.getProcessor());
 			String imageName = file.getName();
@@ -71,113 +66,7 @@ public class Statistic_ implements PlugInFilter{
 				}
 			}
 			
-			//**********************************************************************************//
-
-
-			//**********************************************************************************//
-			//TRAITEMENT DE LA CHAINE DE CARACTERE DU NOM DE L'IMAGE
-
-			/**int i = imageName.length() - 1;
-
-				//on ne veut pas prendre en compte le .png
-				while(i>=0 && imageName.charAt(i)!='.'){
-					i--;
-				}
-				i--;//on saute le "."
-
-				//on vérifie qu'on a pas atteint le début de la chaine et que le caractère courant est différent de "-"
-				while(i>=0 && imageName.charAt(i)!='-'){
-					sb.append(imageName.charAt(i));
-					i--;
-				}
-
-				sb.reverse();
-				IJ.showMessage(figure);
-				figure = sb.toString();
-
-				i--; // on saute le "."
-				sb = new StringBuffer();
-
-				//on vérifie qu'on a pas atteint le début de la chaine et que le caractère courant est différent de "_"
-				while(i>=0 && imageName.charAt(i)!='_'){
-					sb.append(imageName.charAt(i));
-					i--;
-				}
-
-				sb.reverse();
-
-				//pour virer un éventuel "0" devant le nombre
-				try{
-					int num = Integer.parseInt(sb.toString());
-					number = String.valueOf(num);
-				}catch(Exception e){
-<<<<<<< HEAD
-					//si la chaine est vide par exemple
-				}**/
-=======
-					//si la chaine n'est pas un nombre
-					number = sb.toString();
-				}
->>>>>>> origin/master
-
-			//**********************************************************************************//
-
-
-			/**IJ.showMessage("Figure : '" + figure + "' et on trouve : '" + ssChaine2 + "'-> " + (figure.equals(ssChaine2)));
-				IJ.showMessage("Nombre : '" + number + "' et on trouve : '" + ssChaine1 + "'-> " + (number.equals(ssChaine1)));
-
-
-
-
-				//**********************************************************************************
-				//STATISTIQUES EFFECTUEES
-
-				if(ssChaine1.equals(number) && ssChaine2.equals(figure)){
-					IJ.showMessage("Valide");
-					nbValide++;
-				}
-
-				//en cas d'inversion dans l'ordre de reconnaissance
-				else if(ssChaine1.equals(figure) && ssChaine2.equals(number)){
-					IJ.showMessage("Valide");
-					nbValide++;
-				}
-
-				else if(ssChaine1.equals(number)){
-					IJ.showMessage("Nombre valide et Figure invalide");
-					nbValideAMoitie++;
-				}
-
-				//en cas d'inversion
-				else if(ssChaine2.equals(number)){
-					IJ.showMessage("Figure valide et nombre invalide");
-					nbValideAMoitie++;
-				}
-
-				else if(ssChaine2.equals(figure)){
-					IJ.showMessage("Figure valide et nombre invalide");
-					nbValideAMoitie++;
-				}
-
-				//en cas d'inversion
-				else if(ssChaine2.equals(number)){
-					IJ.showMessage("Figure valide et nombre invalide");
-					nbValideAMoitie++;
-				}
-
-				else{
-					IJ.showMessage("Invalide");
-					nbInvalide++;
-				}
-				nbCards++;
-
-				//**********************************************************************************
-			}catch(Exception e){
-				//si pb lors de l'ouverture d'un fichier
-				IJ.showMessage("Pb");
-			}
-
-			 */
+	
 		}//fin for toutes les cartes
 
 
