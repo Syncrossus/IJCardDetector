@@ -18,6 +18,7 @@ import morpho.Morpho;
 import scaling.Resizer;
 import tools.Convolution;
 import tools.Match;
+import tools.MathTools;
 
 public class TemplateMatching_ implements PlugInFilter{
 	
@@ -65,7 +66,7 @@ public class TemplateMatching_ implements PlugInFilter{
 		Match result = null;
 		
 		for(ImagePlus template:templates){
-			double value = Convolution.getPercent(template.getProcessor(), image);
+			double value = getMatchPercent(template.getProcessor(), image);
 			if(value>max){
 				// Retourne uniquement le nom du template
 				result = new Match(value, template.getTitle().substring(0, template.getTitle().indexOf('.')));
@@ -120,6 +121,83 @@ public class TemplateMatching_ implements PlugInFilter{
 		}
 	}
 
+	public static double getMatchPercent(ImageProcessor template, ImageProcessor image){
+		int windowSize = (template.getWidth()/2)%2==0?template.getWidth()/2+1:template.getWidth()/2;
+		double[] values = new double[windowSize*windowSize]; // this array will contain [match percentage with i and j offset]
+		
+		for (int i = -windowSize/2; i < windowSize/2; i++) {      // i is the x offset in the template matching
+			for (int j = -windowSize/2; j < windowSize/2; j++) {// j is the y offset in the template matching
+				values[(i+windowSize/2)*(j+windowSize/2)+j+windowSize/2]=getMatchPercentAtXY(template, image, i, j);  //match percentage at x offset i and y offset j
+//				IJ.showMessage("Match percentage at "+i+", "+j+": "+a);
+			}
+		}
+		return MathTools.max(values);
+	}
+	
+//	public static double getPercentMean(ImageProcessor template, ImageProcessor image){
+//		double[][] values = new double[(2*template.getWidth()+1)*(2*template.getHeight()+1)][3]; // this matrix will contain [match percentage with i and j offset][i][j] for every i and j
+//		double value=0, sommeCoeffs=0, coeff;
+//		for (int i = -template.getWidth(); i < template.getWidth(); i++) {      // i is the x offset in the template matching
+//			for (int j = -template.getHeight(); j < template.getHeight(); j++) {// j is the y offset in the template matching
+//				values[(i+template.getWidth())*(j+template.getHeight())+(j+template.getHeight())][0]=getPercentOld(template, image, i, j);  //match percentage at x offset i and y offset j
+//				values[(i+template.getWidth())*(j+template.getHeight())+(j+template.getHeight())][1]=i; //we'll need i and j later
+//				values[(i+template.getWidth())*(j+template.getHeight())+(j+template.getHeight())][2]=j;
+//			}
+//		}
+//		
+//		for (int i = 0; i < values.length; i++) {   //this loop calculates the final match percentage based on all the previously computed match percentages
+//			coeff=1/(Math.hypot(values[i][1], values[i][2])+1);   //the absolute offset is the pythagorean distance between the point described by (xOffset, yOffset) and (0,0)
+//															  //the importance of a value is computed by 1/absoluteOffset
+//			sommeCoeffs+=coeff;  //we'll need the sum of coefficients to bring the value back to 0-100
+//			value+=values[i][0]*coeff; //we add each weighted match percentage to the general match percentage
+//		}
+//		return value/sommeCoeffs;  // we bring back the match percentage to 0-100 and return it
+//	}
+	
+	public static double getMatchPercentAtXY(ImageProcessor template, ImageProcessor image, int xOffset, int yOffset){
+		double pixelBlanc = 0 , pixelNoir = 0;
+		double nbPixelBlancTemplate = 0, nbPixelBlancImage = 0;
+		double nbPixelNoirTemplate = 0, nbPixelNoirImage = 0;
+
+		for(int i = xOffset; i<template.getWidth()+xOffset; i++){
+			for(int j = yOffset; j<template.getHeight()+yOffset; j++){
+				try{
+					if(template.getPixel(i, j) == image.getPixel(i, j)){
+						if(template.getPixel(i, j) == 0){
+							pixelNoir++;
+							nbPixelNoirTemplate++;
+							nbPixelNoirImage++;
+						}
+						else if(template.getPixel(i,j) == 255){
+							pixelBlanc++;
+							nbPixelBlancTemplate++;
+							nbPixelBlancImage++;
+						}
+					}
+
+					else{
+						if (template.getPixel(i, j) == 0){
+							nbPixelNoirTemplate++;
+							nbPixelBlancImage++;
+						}
+						else{
+							nbPixelBlancTemplate++;
+							nbPixelNoirImage++;
+						}
+					}
+				}
+				catch(Exception e){
+					//erreur si images pas de la même taille et qu'on sort de "image"
+				}
+			}
+		}
+
+		double nbPixelNoir = (nbPixelNoirImage<nbPixelNoirTemplate)? nbPixelNoirTemplate:nbPixelNoirImage;
+		double nbPixelBlanc = (nbPixelBlancImage<nbPixelBlancTemplate)? nbPixelBlancTemplate:nbPixelBlancTemplate;
+		
+		return (2*((pixelNoir/nbPixelNoir) * 100) + ((pixelBlanc/nbPixelBlanc)*100))/3;
+	}
+	
 	/**
 	 * OBSOLETE
 	 * Init the result string of the template matching, considering the detected matches

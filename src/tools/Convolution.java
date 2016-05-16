@@ -28,6 +28,45 @@ public class Convolution {
 	}
 
 	/**
+	 * @param template : a template image to find in the target image
+	 * @param image : the image in which to search for the template
+	 * @return a matrix with a match percentage for each position the template can occupy on the image
+	 */
+	public static double correlationCroisee(ImageProcessor template, ImageProcessor image){
+		// La correlation croisee est une convolution sans symétrisation.
+		// Nous allons donc utiliser la convolution, et symétriser notre masque avant pour compenser la symétrisation de la convolution.
+		// Nous symmetrisons le masque lors de sa création (le constructeur de Masque(ImageProcessor) le fait pour nous)
+		Masque m = new Masque(template);		
+		int rayon = m.getRayon();
+		double valeur = 0;
+	
+		for(int i=-rayon; i<=rayon; i++){
+			for(int j=-rayon; j<=rayon; j++){
+				int x = image.getWidth()/2+i,  y = image.getHeight()/2+j;
+	
+				if(x<0){
+					x=0;
+				}
+				else if(x>image.getWidth()-1){
+					x = image.getWidth()-1;
+				}
+	
+				if(y<0){
+					y=0;
+				}
+				else if(y>image.getHeight()-1){
+					y = image.getHeight()-1;
+				}
+				
+				valeur += (image.getPixel(x,y)*2-255)*(m.get(-i, -j)*2-255); //*2-255 to recenter between -255 and 255 (if not, color mismatches don't penalize match value)
+			}
+		}
+	
+		return valeur;
+		//return Convolution.convoluer(image, m);
+	}
+
+	/**
 	 * Retourne la valeur du pixel (col, line) modifié par le masque de convolution .
 	 * @param ip l'image d'origine
 	 * @param masque le masque à appliquer
@@ -65,6 +104,19 @@ public class Convolution {
 	}
 	
 	/**
+	 * @param template : a template image to find in the target image
+	 * @param image : the image in which to search for the template
+	 * @return a matrix with a match percentage for each position the template can occupy on the image
+	 */
+	public static double correlationCroiseeNormalisee(ImageProcessor template, ImageProcessor image){
+		// La correlation croisee est une convolution sans symétrisation.
+		// Nous allons donc utiliser la convolution, et symétriser notre masque avant pour compenser la symétrisation de la convolution.
+		// Nous symmetrisons le masque lors de sa création (le constructeur de Masque(ImageProcessor) le fait pour nous)
+		Masque m = new Masque(template);
+		return appliquerMasqueNormalise(image, m, image.getWidth()/2, image.getHeight()/2);
+	}
+	
+	/**
 	 * Retourne la valeur du pixel (col, line) modifié par le masque de convolution .
 	 * @param ip l'image d'origine
 	 * @param masque le masque à appliquer
@@ -78,18 +130,18 @@ public class Convolution {
 		double templateMean=masque.moyenne();
 		double n = masque.getLargeur()*masque.getLargeur(); 
 		double valeur = 0;
-
+	
 		for(int i=-rayon; i<=rayon; i++){
 			for(int j=-rayon; j<=rayon; j++){
 				int x = col+i,  y = line+j;
-
+	
 				if(x<0){
 					x=0;
 				}
 				else if(x>ip.getWidth()-1){
 					x = ip.getWidth()-1;
 				}
-
+	
 				if(y<0){
 					y=0;
 				}
@@ -104,106 +156,10 @@ public class Convolution {
 				valeur += (normalizedPx*normalizedMaskVal)/(imageStdDev*maskStdDev);
 			}
 		}
-
+	
 		return (1/n)*valeur;
 	}
-	
-	/**
-	 * @param template : a template image to find in the target image
-	 * @param image : the image in which to search for the template
-	 * @return a matrix with a match percentage for each position the template can occupy on the image
-	 */
-	public static double correlationCroisee(ImageProcessor template, ImageProcessor image){
-		// La correlation croisee est une convolution sans symétrisation.
-		// Nous allons donc utiliser la convolution, et symétriser notre masque avant pour compenser la symétrisation de la convolution.
-		// Nous symmetrisons le masque lors de sa création (le constructeur de Masque(ImageProcessor) le fait pour nous)
-		Masque m = new Masque(template);		
-		int rayon = m.getRayon();
-		double valeur = 0;
 
-		for(int i=-rayon; i<=rayon; i++){
-			for(int j=-rayon; j<=rayon; j++){
-				int x = image.getWidth()/2+i,  y = image.getHeight()/2+j;
-
-				if(x<0){
-					x=0;
-				}
-				else if(x>image.getWidth()-1){
-					x = image.getWidth()-1;
-				}
-
-				if(y<0){
-					y=0;
-				}
-				else if(y>image.getHeight()-1){
-					y = image.getHeight()-1;
-				}
-				
-				valeur += (image.getPixel(x,y)*2-255)*(m.get(-i, -j)*2-255); //*2-255 to recenter between -255 and 255 (if not, color mismatches don't penalize match value)
-			}
-		}
-
-		return valeur;
-		//return Convolution.convoluer(image, m);
-	}
-	
-	public static double getPercent(ImageProcessor template, ImageProcessor image){
-		double pixelBlanc = 0 , pixelNoir = 0;
-		double nbPixelBlancTemplate = 0, nbPixelBlancImage = 0;
-		double nbPixelNoirTemplate = 0, nbPixelNoirImage = 0;
-		
-		for(int i = 0; i<template.getWidth(); i++){
-			for(int j = 0; j<template.getHeight(); j++){
-				try{
-					if(template.getPixel(i, j) == image.getPixel(i, j)){
-						if(template.getPixel(i, j) == 0){
-							pixelNoir++;
-							nbPixelNoirTemplate++;
-							nbPixelNoirImage++;
-						}
-						else if(template.getPixel(i,j) == 255){
-							pixelBlanc++;
-							nbPixelBlancTemplate++;
-							nbPixelBlancImage++;
-						}
-					}
-					
-					else{
-						if (template.getPixel(i, j) == 0){
-							nbPixelNoirTemplate++;
-							nbPixelBlancImage++;
-						}
-						else{
-							nbPixelBlancTemplate++;
-							nbPixelNoirImage++;
-						}
-					}
-				}
-				catch(Exception e){
-					//erreur si images pas de la même taille et qu'on sort de "image"
-				}
-			}
-		}
-		
-		double nbPixelNoir = (nbPixelNoirImage<nbPixelNoirTemplate)? nbPixelNoirTemplate:nbPixelNoirImage;
-		double nbPixelBlanc = (nbPixelBlancImage<nbPixelBlancTemplate)? nbPixelBlancTemplate:nbPixelBlancTemplate;
-		
-		return (2*((pixelNoir/nbPixelNoir) * 100) + ((pixelBlanc/nbPixelBlanc)*100))/3;
-	}
-	
-	/**
-	 * @param template : a template image to find in the target image
-	 * @param image : the image in which to search for the template
-	 * @return a matrix with a match percentage for each position the template can occupy on the image
-	 */
-	public static double correlationCroiseeNormalisee(ImageProcessor template, ImageProcessor image){
-		// La correlation croisee est une convolution sans symétrisation.
-		// Nous allons donc utiliser la convolution, et symétriser notre masque avant pour compenser la symétrisation de la convolution.
-		// Nous symmetrisons le masque lors de sa création (le constructeur de Masque(ImageProcessor) le fait pour nous)
-		Masque m = new Masque(template);
-		return appliquerMasqueNormalise(image, m, image.getWidth()/2, image.getHeight()/2);
-	}
-	
 	/**
      * Affiche une matrice de nombres reels dans une nouvelle fenetre.
      * Comme les elements de cette matrice ne sont pas forcement dans le
