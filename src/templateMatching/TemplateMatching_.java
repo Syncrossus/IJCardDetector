@@ -104,6 +104,22 @@ public class TemplateMatching_ implements PlugInFilter{
 	}
 	
 	/**
+	 * 
+	 * Même méthode que run mais permet de retourner String affichée
+	 */
+	public String statCC(ImageProcessor ip){
+		List<ConnectedComponent> ccs = CCIdentifier.getCC(0, ip);
+		String result = "";
+		for(ConnectedComponent cc:ccs){
+			String match = matchCC(cc);
+			if(match != null){
+				result += " " + match;
+			}
+		}
+		return result;
+	}
+	
+	/**
 	 * Obsolète, mais peut servir. Autant le garder tant qu'on a pas une architecture fixe.
 	 */
 	private static double startTemplateMatching(ImageProcessor ip, ImageProcessor template){
