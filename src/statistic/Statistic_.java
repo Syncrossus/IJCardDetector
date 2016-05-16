@@ -12,8 +12,7 @@ import ij.process.ImageProcessor;
 public class Statistic_ implements PlugInFilter{
 
 	public Statistic_(){
-		this.initImageRef("dataset/personnel/Hugo_Martin");
-		this.initImageRef("dataset/image_resized");
+		this.initImageRef("dataset/normal");
 	}
 
 	private void initImageRef(String path){

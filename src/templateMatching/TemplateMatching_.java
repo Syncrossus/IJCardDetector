@@ -86,7 +86,7 @@ public class TemplateMatching_ implements PlugInFilter{
 			return "invalide";
 		}
 		// Indentification du numero
-		initTemplates("src/image/numero");
+		initTemplates("src/templates/numero");
 		List<Match> matches = new ArrayList<Match>();
 		
 		for(ConnectedComponent cc:ccs){
@@ -99,7 +99,7 @@ public class TemplateMatching_ implements PlugInFilter{
 		
 		double min = (matches.get(0).compareTo(matches.get(1)) <= 0)? matches.get(1).getValue():matches.get(0).getValue();
 		// Identification de la couleur
-		initTemplates("src/image/couleur");
+		initTemplates("src/templates/couleur");
 		Match match = new Match();
 		
 		for(ConnectedComponent cc:ccs){
