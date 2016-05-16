@@ -5,6 +5,7 @@ import java.util.List;
 import binarisation.Otsu_;
 import edges.Canny_;
 import extraction.Hough_;
+import ij.IJ;
 import ij.ImagePlus;
 import ij.gui.ImageWindow;
 import ij.plugin.filter.PlugInFilter;
@@ -16,8 +17,11 @@ import tools.Line;
 
 public class Main_ implements PlugInFilter{
 	@Override
-	public void run(ImageProcessor ip) {
+	public void run(ImageProcessor ip) {	
+		IJ.showMessage(launch(ip));
+	}
 
+	public static String launch(ImageProcessor ip){
 		ip  = FiltreGaussien_.apply(ip, 3);
 		ImageProcessor result = Otsu_.apply(ip);	 
 		// Extraction de la carte
@@ -45,10 +49,9 @@ public class Main_ implements PlugInFilter{
 		
 		ip = Otsu_.apply(ip);
 		TemplateMatching_ matcher = new TemplateMatching_();
-		matcher.run(ip);
+		return matcher.launch(ip);
 	}
-
-
+	
 	@Override
 	public int setup(String arg, ImagePlus imp) {
 		return DOES_ALL;
