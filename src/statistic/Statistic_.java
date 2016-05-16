@@ -19,7 +19,7 @@ import tools.Line;
 public class Statistic_ implements PlugInFilter{
 
 	public Statistic_(){
-		this.initImageRef("dataset/normal");
+		this.initImageRef("dataset/image_resized");
 	}
 
 	private void initImageRef(String path){
@@ -154,7 +154,8 @@ public class Statistic_ implements PlugInFilter{
 					int num = Integer.parseInt(sb.toString());
 					number = String.valueOf(num);
 				}catch(Exception e){
-					//si la chaine est vide par exemple
+					//si la chaine n'est pas un nombre
+					number = sb.toString();
 				}
 
 				//**********************************************************************************//
