@@ -12,7 +12,11 @@ import ij.process.ImageProcessor;
 public class Statistic_ implements PlugInFilter{
 
 	public Statistic_(){
+<<<<<<< HEAD
 		this.initImageRef("dataset/personnel/Hugo_Martin");
+=======
+		this.initImageRef("dataset/image_resized");
+>>>>>>> origin/master
 	}
 
 	private void initImageRef(String path){
@@ -107,8 +111,14 @@ public class Statistic_ implements PlugInFilter{
 					int num = Integer.parseInt(sb.toString());
 					number = String.valueOf(num);
 				}catch(Exception e){
+<<<<<<< HEAD
 					//si la chaine est vide par exemple
 				}**/
+=======
+					//si la chaine n'est pas un nombre
+					number = sb.toString();
+				}
+>>>>>>> origin/master
 
 			//**********************************************************************************//
 
