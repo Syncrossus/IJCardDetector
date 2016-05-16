@@ -79,7 +79,7 @@ public class TemplateMatching_ implements PlugInFilter{
 			}
 		}
 		
-		IJ.showMessage(result + ": " + max);
+		//IJ.showMessage(result + ": " + max);
 		if(max<60){
 			result = null;
 		}
@@ -100,7 +100,7 @@ public class TemplateMatching_ implements PlugInFilter{
 			}
 		}
 		
-		IJ.showMessage(result);
+		//IJ.showMessage(result);
 	}
 	
 	/**
