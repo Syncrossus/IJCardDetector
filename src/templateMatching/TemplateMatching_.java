@@ -68,7 +68,7 @@ public class TemplateMatching_ implements PlugInFilter{
 			double value = getMatchPercentWithOffset(template.getProcessor(), image, 0,0);
 			if(value>max){
 				// Retourne uniquement le nom du template
-				int index = (template.getTitle().indexOf('_') != -1) ? template.getTitle().indexOf('_'):template.getTitle().indexOf('_');
+				int index = (template.getTitle().indexOf('_') != -1) ? template.getTitle().indexOf('_'):template.getTitle().indexOf('.');
 				result = new Match(value, template.getTitle().substring(0, index));
 				max = value;
 			}
