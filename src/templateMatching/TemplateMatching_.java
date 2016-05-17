@@ -16,7 +16,6 @@ import ij.process.ImageProcessor;
 import morpho.ElementStructurant;
 import morpho.Morpho;
 import scaling.Resizer;
-import tools.Convolution;
 import tools.Match;
 import tools.MathTools;
 
@@ -66,7 +65,7 @@ public class TemplateMatching_ implements PlugInFilter{
 		Match result = null;
 		
 		for(ImagePlus template:templates){
-			double value = getMatchPercent(template.getProcessor(), image);
+			double value = getMatchPercentWithOffset(template.getProcessor(), image, 0,0);
 			if(value>max){
 				// Retourne uniquement le nom du template
 				result = new Match(value, template.getTitle().substring(0, template.getTitle().indexOf('.')));
@@ -87,7 +86,7 @@ public class TemplateMatching_ implements PlugInFilter{
 			return "invalide";
 		}
 		// Indentification du numero
-		initTemplates("src/templates/numero");
+		initTemplates("src/image/numero");
 		List<Match> matches = new ArrayList<Match>();
 		
 		for(ConnectedComponent cc:ccs){
@@ -100,7 +99,7 @@ public class TemplateMatching_ implements PlugInFilter{
 		
 		double min = (matches.get(0).compareTo(matches.get(1)) <= 0)? matches.get(1).getValue():matches.get(0).getValue();
 		// Identification de la couleur
-		initTemplates("src/templates/couleur");
+		initTemplates("src/image/couleur");
 		Match match = new Match();
 		
 		for(ConnectedComponent cc:ccs){
@@ -127,7 +126,7 @@ public class TemplateMatching_ implements PlugInFilter{
 		
 		for (int i = -windowSize/2; i < windowSize/2; i++) {      // i is the x offset in the template matching
 			for (int j = -windowSize/2; j < windowSize/2; j++) {// j is the y offset in the template matching
-				values[(i+windowSize/2)*(j+windowSize/2)+j+windowSize/2]=getMatchPercentAtXY(template, image, i, j);  //match percentage at x offset i and y offset j
+				values[(i+windowSize/2)*(j+windowSize/2)+j+windowSize/2]=getMatchPercentWithOffset(template, image, i, j);  //match percentage at x offset i and y offset j
 //				IJ.showMessage("Match percentage at "+i+", "+j+": "+a);
 			}
 		}
@@ -154,7 +153,7 @@ public class TemplateMatching_ implements PlugInFilter{
 //		return value/sommeCoeffs;  // we bring back the match percentage to 0-100 and return it
 //	}
 	
-	public static double getMatchPercentAtXY(ImageProcessor template, ImageProcessor image, int xOffset, int yOffset){
+	public static double getMatchPercentWithOffset(ImageProcessor template, ImageProcessor image, int xOffset, int yOffset){
 		double pixelBlanc = 0 , pixelNoir = 0;
 		double nbPixelBlancTemplate = 0, nbPixelBlancImage = 0;
 		double nbPixelNoirTemplate = 0, nbPixelNoirImage = 0;
