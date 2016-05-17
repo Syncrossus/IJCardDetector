@@ -79,8 +79,8 @@ public class Statistic_ implements PlugInFilter{
 			//affichage des stats obtenues
 			IJ.showMessage("Pourcentage valide : " + ((double)nbValide/(double)nbCards)*100 + " %" + 
 					"\nPourcentage à moitié valide : " + ((double)nbValideAMoitie/(double)nbCards)*100 + " %" +  
-					"\nCouleur valide : " + ((double)nbCouleur/(double)nbCards)*100 + " %" + 
-					"\nNuméro valide : " + ((double)nbNumero/(double)nbCards)*100 + " %" + 
+					"\nCouleur valide : " + (double)nbCouleur/(double)(nbValide+nbValideAMoitie)*100 + " %" + 
+					"\nNuméro valide : " + (double)nbNumero/(double)(nbValide+nbValideAMoitie)*100 + " %" + 
 					"\nPourcentage invalide : " + ((double)nbInvalide/(double)nbCards)*100 + " %"	
 			);
 

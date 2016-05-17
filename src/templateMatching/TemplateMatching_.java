@@ -195,7 +195,7 @@ public class TemplateMatching_ implements PlugInFilter{
 		double nbPixelNoir = (nbPixelNoirImage<nbPixelNoirTemplate)? nbPixelNoirTemplate:nbPixelNoirImage;
 		double nbPixelBlanc = (nbPixelBlancImage<nbPixelBlancTemplate)? nbPixelBlancTemplate:nbPixelBlancTemplate;
 		
-		return (2*((pixelNoir/nbPixelNoir) * 100) + ((pixelBlanc/nbPixelBlanc)*100))/3;
+		return (4*((pixelNoir/nbPixelNoir) * 100) + ((pixelBlanc/nbPixelBlanc)*100))/5;
 	}
 	
 	/**
