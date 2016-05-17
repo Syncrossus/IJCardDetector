@@ -196,7 +196,7 @@ public class Card {
 	public ImageProcessor extractCorner(ImageProcessor ip){
 		ImageProcessor card = this.extract(ip);
 		double COEFF_CORNER_WIDTH = 0.20;
-		double COEFF_CORNER_HEIGHT = 0.35;
+		double COEFF_CORNER_HEIGHT = 0.30;
 		double COEFF_CORNER_START_WIDTH = 0.15;
 		double COEFF_CORNER_START_HEIGHT= 0.05;
 

@@ -12,7 +12,7 @@ import ij.process.ImageProcessor;
 public class Statistic_ implements PlugInFilter{
 
 	public Statistic_(){
-		this.initImageRef("dataset/normal");
+		this.initImageRef("dataset/test");
 	}
 
 	private void initImageRef(String path){
@@ -25,6 +25,7 @@ public class Statistic_ implements PlugInFilter{
 
 		//résultats des stats
 		int nbValide = 0, nbValideAMoitie = 0, nbInvalide = 0;
+		int nbCouleur = 0, nbNumero = 0;
 		int nbCards = 0;
 
 		for(File file:files){
@@ -45,13 +46,21 @@ public class Statistic_ implements PlugInFilter{
 					String figure = cardResult.substring(cardResult.indexOf("_")+1, cardResult.length());
 					String number = cardResult.substring(0, cardResult.indexOf("_"));;
 
-					if(imageName.contains(figure) && imageName.contains(number))
+					if(imageName.contains(figure) && imageName.contains(number)){
 						nbValide++;
-					else if(imageName.contains(figure) || imageName.contains(number))
+						nbCouleur++;
+						nbNumero++;
+					}
+					else if(imageName.contains(figure)){
 						nbValideAMoitie++;
+						nbCouleur++;
+					}
+					else if(imageName.contains(number)){
+						nbValideAMoitie++;
+						nbNumero++;
+					}
 					else
 						nbInvalide++;
-					nbCards++;
 				}
 				else{
 					if(imageName.contains(cardResult))
@@ -59,6 +68,7 @@ public class Statistic_ implements PlugInFilter{
 					else
 						nbInvalide++;
 				}
+				nbCards++;
 			}
 			catch(Exception e){
 				//TODO : à voir
@@ -69,6 +79,8 @@ public class Statistic_ implements PlugInFilter{
 			//affichage des stats obtenues
 			IJ.showMessage("Pourcentage valide : " + ((double)nbValide/(double)nbCards)*100 + " %" + 
 					"\nPourcentage à moitié valide : " + ((double)nbValideAMoitie/(double)nbCards)*100 + " %" +  
+					"\nCouleur valide : " + ((double)nbCouleur/(double)nbCards)*100 + " %" + 
+					"\nNuméro valide : " + ((double)nbNumero/(double)nbCards)*100 + " %" + 
 					"\nPourcentage invalide : " + ((double)nbInvalide/(double)nbCards)*100 + " %"	
 			);
 
