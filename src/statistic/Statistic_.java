@@ -30,56 +30,53 @@ public class Statistic_ implements PlugInFilter{
 		for(File file:files){
 			//**********************************************************************************//
 			// APPLICATION TEMPLATE MATCHING
-			ImagePlus implus = opener.openImage(file.getAbsolutePath());
-			String cardResult = Main_.launch(implus.getProcessor());
-			String imageName = file.getName();
+			try{
+				ImagePlus implus = opener.openImage(file.getAbsolutePath());
+				String cardResult = Main_.launch(implus.getProcessor());
+				String imageName = file.getName();
 
-			//**********************************************************************************//
+				//**********************************************************************************//
 
-			//**********************************************************************************//
-			// COMPARAISON DES RESULTATS
+				//**********************************************************************************//
+				// COMPARAISON DES RESULTATS
 
-			// On récupère le numero et la couleur
-			if(cardResult.contains("_")){
-				String figure = cardResult.substring(cardResult.indexOf("_")+1, cardResult.length());
-				String number = cardResult.substring(0, cardResult.indexOf("_"));;
-	
-				if(imageName.contains(figure) && imageName.contains(number)){
-					nbValide++;
-				}
-				else if(imageName.contains(figure) || imageName.contains(number)){
-					nbValideAMoitie++;
-				}
-				else{
-					nbInvalide++;
-				}
-	
-				nbCards++;
-			}
-			else{
-				if(imageName.contains(cardResult)){
-					nbValide++;
+				// On récupère le numero et la couleur
+				if(cardResult.contains("_")){
+					String figure = cardResult.substring(cardResult.indexOf("_")+1, cardResult.length());
+					String number = cardResult.substring(0, cardResult.indexOf("_"));;
+
+					if(imageName.contains(figure) && imageName.contains(number))
+						nbValide++;
+					else if(imageName.contains(figure) || imageName.contains(number))
+						nbValideAMoitie++;
+					else
+						nbInvalide++;
+					nbCards++;
 				}
 				else{
-					nbInvalide++;
+					if(imageName.contains(cardResult))
+						nbValide++;
+					else
+						nbInvalide++;
 				}
 			}
-			
-	
-		}//fin for toutes les cartes
-
-
+			catch(Exception e){
+				//TODO : à voir
+			}	
+		}//fin for toutes les images
+		
 		try{
 			//affichage des stats obtenues
 			IJ.showMessage("Pourcentage valide : " + ((double)nbValide/(double)nbCards)*100 + " %" + 
 					"\nPourcentage à moitié valide : " + ((double)nbValideAMoitie/(double)nbCards)*100 + " %" +  
 					"\nPourcentage invalide : " + ((double)nbInvalide/(double)nbCards)*100 + " %"	
-					);
+			);
 
 		}catch(Exception e){
 			//si pas d'image dans le dossier, division par 0
 			IJ.showMessage("Pas d'image dans le dossier");
 		}
+
 	}
 
 	@Override
